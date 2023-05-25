@@ -4,7 +4,7 @@
 
 
 const express = require('express');
-                const session = require('express-session');
+const session = require('express-session');
                 const csrf = require('csrf');
                 const bodyParser = require('body-parser');
                 const crypto = require('crypto');
@@ -35,14 +35,9 @@ const bodyParser = require("body-parser");
 
 const crypto = require("crypto");
 
-const app = express();
-
-const secret = crypto.randomBytes(16).toString("hex");
-const tokens = new csrf({ secret });
-
 function csrfMiddleware(req, res, next) {
   const token = tokens.create(secret);
-  res.cookie("_csrf", token, { maxAge: 15 * 60 * 1000, httpOnly: true, sameSite: "Strict" });
+  res.cookie("_csrf", token, );
   req.csrfToken = () => token;
   next();
 }
