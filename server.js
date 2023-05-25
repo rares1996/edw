@@ -3,7 +3,33 @@
 
 
 
-const express = require("express");
+const express = require('express');
+                const session = require('express-session');
+                const csrf = require('csrf');
+                const bodyParser = require('body-parser');
+                const crypto = require('crypto');
+                
+                const app = express();
+                
+                const secret = crypto.randomBytes(16).toString('hex');
+                const tokens = new csrf({ secret });
+                
+                app.use(session({
+                  secret: 'session secret',
+                  resave: false,
+                  saveUninitialized: true,
+                  cookie: { secure: true } // 
+                }));
+                
+                app.use(bodyParser.urlencoded({ extended: false }));
+                
+                app.use((req, res, next) => {
+                  if (!req.session.csrfToken) {
+                    req.session.csrfToken = tokens.create(secret);
+                  }
+                  res.locals.csrfToken = req.session.csrfToken;
+                  next();
+                });
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
