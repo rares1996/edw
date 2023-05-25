@@ -37,7 +37,7 @@ const crypto = require("crypto");
 
 function csrfMiddleware(req, res, next) {
   const token = tokens.create(secret);
-  res.cookie("_csrf", token, );
+  res.cookie("_csrf", token, { maxAge: 15 * 60 * 1000, httpOnly: true, sameSite: "Strict" } );
   req.csrfToken = () => token;
   next();
 }
